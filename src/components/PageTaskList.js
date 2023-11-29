@@ -25,7 +25,8 @@ const PageTaskList = () => {
         setTitle(task.title);
         setDescription(task.description);
         setId(task.id);
-        document.getElementById('my_modal_3').showModal();
+        const editModal = document.getElementById('my_modal_3')
+        editModal.showModal();
     };
 
     const handleTaskSubmit = () => {
@@ -38,7 +39,8 @@ const PageTaskList = () => {
         setTitle('');
         setDescription('');
         setId('');
-        document.getElementById('my_modal_3').close();
+        const editModal = document.getElementById('my_modal_3')
+        editModal.close();
     };
 
     const indexOfLastTask = currentPage * tasksPerPage;
@@ -63,7 +65,7 @@ const PageTaskList = () => {
                     </h1>
                 ) : (
                     currentTasks.map((task, i) => (
-                        <React.Fragment key={i} className="flex-shrink-0">
+                        <React.Fragment key={i}>
                             <div
                                 className="max-w-sm rounded overflow-hidden shadow-lg m-3 border border-gray-100"
                                 style={{
@@ -84,6 +86,7 @@ const PageTaskList = () => {
                                         <Edit
                                             onClick={() => openModal(task)}
                                             className='w-6 h-6 ml-3 cursor-pointer text-zinc-500'
+                                            data-testid="edit-icon"
                                         />
                                         <Trash
                                             onClick={(e) => { removeTask(task.id) }}
@@ -94,7 +97,9 @@ const PageTaskList = () => {
                                     </p>
                                 </div>
                                 <div className="px-6 pt-4 pb-2">
-                                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{task.priority}Priority</span>
+                                    <span
+                                        className={`inline-block rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mb-2 ${task.priority === 'low' ? 'bg-green-500' : 'bg-red-500'
+                                            }`}>#{task.priority}Priority</span>
 
                                 </div>
                             </div>
@@ -114,13 +119,13 @@ const PageTaskList = () => {
                     </button>
                 ))}
             </div>
-            <dialog id="my_modal_3" className="modal border rounded-lg w-96">
+            <dialog id="my_modal_3" data-testid="my_modal_3" className="modal border rounded-lg w-96">
                 <div className="modal-box p-5">
                     <form method="dialog" >
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     </form>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" >
                             Title
                         </label>
                         <input
@@ -130,7 +135,7 @@ const PageTaskList = () => {
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Enter task title" />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
                             Description
                         </label>
                         <textarea
